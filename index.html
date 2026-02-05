@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>江湖令 - 以义相许，以诚相待</title>
+    <link rel="stylesheet" href="style-new.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 登录页 -->
+        <div id="page-login" class="page active page-login">
+            <div class="login-bg">
+                <div class="ink-wash"></div>
+                <div class="particles" id="particles"></div>
+                <div class="mountains"></div>
+            </div>
+
+            <div style="position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 40px 30px;">
+                <div class="logo-container">
+                    <div class="logo-main">江湖令</div>
+                    <div class="logo-subtitle">以义相许 · 以诚相待</div>
+                    <div class="logo-decoration"></div>
+                </div>
+
+                <div class="login-form">
+                    <div class="input-wrapper">
+                        <div class="input-icon">📱</div>
+                        <input type="tel" class="login-input" id="phone" placeholder="请输入手机号，踏入江湖" maxlength="11">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="loginWithPhone()">踏入江湖</button>
+                    <button class="btn btn-secondary" onclick="loginWithWechat()">微信令牌</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主页（江湖榜） -->
+        <div id="page-home" class="page">
+            <header class="app-header">
+                <div class="header-title">江湖榜</div>
+                <div class="header-stats">
+                    <span class="nearby-count">🏮 侠客 12</span>
+                </div>
+            </header>
+
+            <!-- 令牌标签 -->
+            <div class="token-tabs">
+                <div class="token-item active" data-type="all" onclick="filterTokens('all')">
+                    <div class="token-badge">
+                        <div class="token-center">
+                            <div class="token-text">令</div>
+                        </div>
+                        <div class="token-label">全部</div>
+                    </div>
+                    <div class="token-tassels">
+                        <div class="tassel"></div>
+                        <div class="tassel"></div>
+                    </div>
+                </div>
+
+                <div class="token-item" data-type="urgent" onclick="filterTokens('urgent')">
+                    <div class="token-badge urgent">
+                        <div class="token-center">
+                            <div class="token-text">急</div>
+                        </div>
+                        <div class="token-label">急字令</div>
+                    </div>
+                    <div class="token-tassels">
+                        <div class="tassel"></div>
+                        <div class="tassel"></div>
+                    </div>
+                </div>
+
+                <div class="token-item" data-type="gather" onclick="filterTokens('gather')">
+                    <div class="token-badge gather">
+                        <div class="token-center">
+                            <div class="token-text">聚</div>
+                        </div>
+                        <div class="token-label">聚字令</div>
+                    </div>
+                    <div class="token-tassels">
+                        <div class="tassel"></div>
+                        <div class="tassel"></div>
+                    </div>
+                </div>
+
+                <div class="token-item" data-type="reward" onclick="filterTokens('reward')">
+                    <div class="token-badge reward">
+                        <div class="token-center">
+                            <div class="token-text">赏</div>
+                        </div>
+                        <div class="token-label">赏字令</div>
+                    </div>
+                    <div class="token-tassels">
+                        <div class="tassel"></div>
+                        <div class="tassel"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 令牌列表 -->
+            <div class="token-list" id="token-list">
+                <!-- 动态生成 -->
+            </div>
+
+            <!-- 底部导航 -->
+            <nav class="bottom-nav">
+                <div class="nav-item active" onclick="showPage('home')">
+                    <span class="nav-icon">📜</span>
+                    <span class="nav-text">江湖榜</span>
+                </div>
+                <div class="nav-item" onclick="showPage('publish')">
+                    <span class="nav-icon">➕</span>
+                    <span class="nav-text">发令</span>
+                </div>
+                <div class="nav-item" onclick="showPage('profile')">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">我的</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 发布页 -->
+        <div id="page-publish" class="page">
+            <!-- 发布页面内容 -->
+        </div>
+
+        <!-- 个人页 -->
+        <div id="page-profile" class="page">
+            <div class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="avatar-wrapper">
+                        <div class="profile-avatar" id="user-avatar" onclick="document.getElementById('avatar-input').click()">🗡️</div>
+                        <div class="avatar-edit-btn" onclick="document.getElementById('avatar-input').click()">✏️</div>
+                        <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="user-name" onclick="editUserName()">初入江湖</div>
+                        <div class="profile-rank">江湖头衔：<span id="user-title">初入江湖</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="stat-helped">0</div>
+                    <div class="stat-label">行侠仗义</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="stat-published">0</div>
+                    <div class="stat-label">发布令牌</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="stat-rating">0%</div>
+                    <div class="stat-label">江湖美名</div>
+                </div>
+            </div>
+
+            <!-- 勋章区域 -->
+            <div class="section-header">
+                <span class="section-icon">🎖️</span>
+                <span class="section-title">江湖勋章</span>
+                <div class="section-line"></div>
+            </div>
+
+            <!-- 历史记录 -->
+            <div class="section-header">
+                <span class="section-icon">📜</span>
+                <span class="section-title">侠义过往</span>
+                <div class="section-line"></div>
+            </div>
+
+            <nav class="bottom-nav">
+                <div class="nav-item" onclick="showPage('home')">
+                    <span class="nav-icon">📜</span>
+                    <span class="nav-text">江湖榜</span>
+                </div>
+                <div class="nav-item" onclick="showPage('publish')">
+                    <span class="nav-icon">➕</span>
+                    <span class="nav-text">发令</span>
+                </div>
+                <div class="nav-item active" onclick="showPage('profile')">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">我的</span>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
